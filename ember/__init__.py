@@ -71,14 +71,14 @@ def create_vectorized_features(data_dir, feature_version=2):
     print("Vectorizing training set")
     X_path = os.path.join(data_dir, "X_train.dat")
     y_path = os.path.join(data_dir, "y_train.dat")
-    raw_feature_paths = [os.path.join(data_dir, "train_{}.jsonl".format(i)) for i in range(4)]
+    raw_feature_paths = [os.path.join(data_dir, "train_{}.jsonl".format(i)) for i in range(3)]
     nrows = sum([1 for fp in raw_feature_paths for line in open(fp)])
     vectorize_subset(X_path, y_path, raw_feature_paths, extractor, nrows)
 
     print("Vectorizing test set")
     X_path = os.path.join(data_dir, "X_test.dat")
     y_path = os.path.join(data_dir, "y_test.dat")
-    raw_feature_paths = [os.path.join(data_dir, "test_{}.jsonl".format(i)) for i in range(3)]
+    raw_feature_paths = [os.path.join(data_dir, "test_{}.jsonl".format(i)) for i in range(4)]
     nrows = sum([1 for fp in raw_feature_paths for line in open(fp)])
     vectorize_subset(X_path, y_path, raw_feature_paths, extractor, nrows)
 
@@ -134,7 +134,7 @@ def create_metadata(data_dir):
     """
     pool = multiprocessing.Pool()
 
-    train_feature_paths = [os.path.join(data_dir, "train_{}.jsonl".format(i)) for i in range(4)]
+    train_feature_paths = [os.path.join(data_dir, "train_{}.jsonl".format(i)) for i in range(3)]
     train_records = list(pool.imap(read_metadata_record, raw_feature_iterator(train_feature_paths)))
 
     metadata_keys = ["sha256", "appeared", "label", "avclass"]
@@ -145,7 +145,7 @@ def create_metadata(data_dir):
 
     train_records = [dict(record, **{"subset": "train"}) for record in train_records]
 
-    test_feature_paths = [os.path.join(data_dir, "test_{}.jsonl".format(i)) for i in range(3)]
+    test_feature_paths = [os.path.join(data_dir, "test_{}.jsonl".format(i)) for i in range(4)]
     test_records = list(pool.imap(read_metadata_record, raw_feature_iterator(test_feature_paths)))
 
     test_metadf = pd.DataFrame(test_records)[ordered_metadata_keys]
