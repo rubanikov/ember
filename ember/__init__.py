@@ -13,6 +13,14 @@ from sklearn.model_selection import TimeSeriesSplit
 from sklearn.metrics import (roc_auc_score, make_scorer)
 
 
+def data_to_numpy_save(file_paths):
+    create_vectorized_features(file_paths)
+    X_train, y_train, X_test, y_test = read_vectorized_features(file_paths)
+    savename = ['X_train', 'y_train', 'X_test', 'y_test']
+    for index, i in enumerate([X_train, y_train, X_test, y_test]):
+        np.save(os.path.join(file_paths, savename[index]), i)
+
+
 def raw_feature_iterator(file_paths):
     """
     Yield raw feature strings from the inputed file paths
